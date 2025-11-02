@@ -1,17 +1,18 @@
 from flask import Flask, render_template, request
 import google.generativeai as genai
+import os
 
 app = Flask(__name__)
 
-genai.configure(api_key="AIzaSyDwvGmfQNLfc7eIhUooI8IGSUbidckEeQE")
+# ✅ Use environment variable (don’t hardcode key)
+genai.configure(api_key=os.getenv("AIzaSyDwvGmfQNLfc7eIhUooI8IGSUbidckEeQE"))
 
-model = genai.GenerativeModel("models/gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     summary = ""
     if request.method == "POST":
-        # ✅ Safely get form data
         input_text = request.form.get("input_text", "")
         if input_text.strip():
             try:
@@ -21,5 +22,6 @@ def home():
                 summary = f"⚠️ Error generating summary: {e}"
     return render_template("index.html", summary=summary)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# ✅ Required by Vercel for routing
+def handler(request):
+    return app(request)
