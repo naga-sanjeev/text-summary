@@ -27,10 +27,10 @@
 #     return app(request)
 
 
-from flask import Flask, jsonify
+# from flask import Flask, jsonify
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return jsonify({"message": "Hello from Flask on Vercel!"})
+# @app.route('/')
+# def home():
+#     return jsonify({"message": "Hello from Flask on Vercel!"})
