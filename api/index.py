@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# ✅ Use environment variable (don’t hardcode key)
+# ✅ Configure Gemini API Key
 genai.configure(api_key=os.getenv("AIzaSyDwvGmfQNLfc7eIhUooI8IGSUbidckEeQE"))
 
 model = genai.GenerativeModel("gemini-2.5-flash")
@@ -13,15 +13,15 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 def home():
     summary = ""
     if request.method == "POST":
-        input_text = request.form.get("input_text", "")
-        if input_text.strip():
+        text = request.form.get("input_text", "")
+        if text.strip():
             try:
-                response = model.generate_content(f"Summarize this:\n{input_text}")
+                response = model.generate_content(f"Summarize this:\n{text}")
                 summary = response.text
             except Exception as e:
-                summary = f"⚠️ Error generating summary: {e}"
+                summary = f"⚠️ Error: {str(e)}"
     return render_template("index.html", summary=summary)
 
-# ✅ Required by Vercel for routing
+# Required by Vercel
 def handler(request):
     return app(request)
